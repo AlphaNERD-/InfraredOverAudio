@@ -10,11 +10,11 @@ const int sendDataMode = 3;
 volatile unsigned long timeBefore;
 volatile unsigned long timeNow;
 volatile unsigned long delta;
-volatile float audioFrequencybefore;
+volatile float audioFrequencyBefore;
 volatile float audioFrequency;
 
 volatile float irFrequency;
-volatile int[100] irData;
+volatile int irData[100];
 volatile int irDataIndex;
 
 volatile int mode = 0;
@@ -42,13 +42,18 @@ void loop ()
     //determined through the timestamps captured in
     //ISR method.
     delta = timeNow - timeBefore;
-    freq = 1.0 / ((float)delta / 1000000.0);
+    audioFrequency = 1.0 / ((float)delta / 1000000.0);
 
     //Do not process the same frequency multiple times
     if (audioFrequency != audioFrequencyBefore)
     {
-      Serial.print (audioFrequency, 10);
-      Serial.println (" Hz.");
+      if (millis() % 1000 == 0)
+      {
+        Serial.print (audioFrequency, 10);
+        Serial.print (" Hz, ");
+        Serial.print (delta);
+        Serial.println (" microsecs");
+      }
 
       switch (mode)
       {
@@ -56,20 +61,30 @@ void loop ()
           if (audioFrequency == setFrequencySound)
           {
             mode = 1;
+
+            Serial.println ("Start setting IR frequency.");
           }
           else if (audioFrequency == receiveDataSound)
           {
             mode = 2;
+
+            Serial.println ("Start receiving IR data.");
           }
           break;
         case setFrequencyMode:
           irFrequency = audioFrequency + 25000;
 
+          Serial.print ("IR frequency set to ");
+          Serial.print (irFrequency, 10);
+          Serial.println (" Hz.");
+          
           mode = readyMode;
           break;
         case receiveDataMode:
           if (audioFrequency == receiveDataEndSound)
           {
+            Serial.println ("Stop receiving IR data.");
+            
             mode = readyMode;
             irDataIndex = 0;
           }
@@ -78,9 +93,14 @@ void loop ()
             irData[irDataIndex] = audioFrequency;
 
             irDataIndex++;
+
+            Serial.print ("IR pulse received: ");
+            Serial.print (irData[irDataIndex]);
+            Serial.println (" microsecs.");
           }
           break;
         case sendDataMode:
+          Serial.println ("Sending IR data...");
           break;
       }
     }
