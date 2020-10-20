@@ -71,6 +71,7 @@
             this.tbxIRdata.Name = "tbxIRdata";
             this.tbxIRdata.Size = new System.Drawing.Size(477, 176);
             this.tbxIRdata.TabIndex = 1;
+            this.tbxIRdata.Text = "+100 +200 +300 +400 +500 +600 +700 +800 +900 +1000";
             // 
             // lblIRfrequency
             // 

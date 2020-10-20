@@ -21,19 +21,23 @@ volatile int mode = 0;
 
 ISR (ANALOG_COMP_vect)
   {
-    timeBefore = timeNow;
-    
-    timeNow = micros();
+    timeNow = TCNT1;
+    Serial.print (timeNow);
+    Serial.println (" TCNT1");
+    //TCNT1 = 0; //reset timer register
   }
 
 void setup ()
   {
-  Serial.begin (115200);
-  Serial.println ("Started.");
-  ADCSRB = 0;           // (Disable) ACME: Analog Comparator Multiplexer Enable
-  ACSR =  bit (ACI)     // (Clear) Analog Comparator Interrupt Flag
-        | bit (ACIE)    // Analog Comparator Interrupt Enable
-        | bit (ACIS1);  // ACIS1, ACIS0: Analog Comparator Interrupt Mode Select (trigger on falling edge)
+    Serial.begin (115200);
+    Serial.println ("Started.");
+    ADCSRB = 0;           // (Disable) ACME: Analog Comparator Multiplexer Enable
+    ACSR =  bit (ACI)     // (Clear) Analog Comparator Interrupt Flag
+          | bit (ACIE)    // Analog Comparator Interrupt Enable
+          | bit (ACIS1);  // ACIS1, ACIS0: Analog Comparator Interrupt Mode Select (trigger on falling edge)
+
+    TCCR1B |= (0 << CS12) | (1 << CS11) | (0 >> CS10); //Activate timer and set prescaler to 8
+    TCNT1 = 0; //Reset timer register
    }  // end of setup
 
 void loop ()
@@ -41,20 +45,20 @@ void loop ()
     //Calculate frequency by using the period duration
     //determined through the timestamps captured in
     //ISR method.
-    delta = timeNow - timeBefore;
-    audioFrequency = 1.0 / ((float)delta / 1000000.0);
+    //delta = timeNow - timeBefore;
+    audioFrequency = 1000000000.0 / (float(timeNow) * 2.0);
+
+    if (millis() % 1000 == 0)
+    {
+      Serial.print (audioFrequency, 5);
+      Serial.print (" Hz, ");
+      Serial.print (timeNow);
+      Serial.println (" TCNT0");
+    }
 
     //Do not process the same frequency multiple times
     if (audioFrequency != audioFrequencyBefore)
     {
-      if (millis() % 1000 == 0)
-      {
-        Serial.print (audioFrequency, 10);
-        Serial.print (" Hz, ");
-        Serial.print (delta);
-        Serial.println (" microsecs");
-      }
-
       switch (mode)
       {
         case readyMode:
