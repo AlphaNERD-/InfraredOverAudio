@@ -22,9 +22,7 @@ volatile int mode = 0;
 ISR (ANALOG_COMP_vect)
   {
     timeNow = TCNT1;
-    Serial.print (timeNow);
-    Serial.println (" TCNT1");
-    //TCNT1 = 0; //reset timer register
+    TCNT1 = 0; //reset timer register
   }
 
 void setup ()
@@ -36,6 +34,7 @@ void setup ()
           | bit (ACIE)    // Analog Comparator Interrupt Enable
           | bit (ACIS1);  // ACIS1, ACIS0: Analog Comparator Interrupt Mode Select (trigger on falling edge)
 
+    TCCR1A = 0;
     TCCR1B |= (0 << CS12) | (1 << CS11) | (0 >> CS10); //Activate timer and set prescaler to 8
     TCNT1 = 0; //Reset timer register
    }  // end of setup
@@ -46,7 +45,7 @@ void loop ()
     //determined through the timestamps captured in
     //ISR method.
     //delta = timeNow - timeBefore;
-    audioFrequency = 1000000000.0 / (float(timeNow) * 2.0);
+    audioFrequency = 1000000.0 / (float(timeNow) * 4.0);
 
     if (millis() % 1000 == 0)
     {
