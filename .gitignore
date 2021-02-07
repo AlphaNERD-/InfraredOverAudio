@@ -1,3 +1,5 @@
-﻿SignalGenerator/SignalGenerator/obj
-SignalGenerator/SignalGenerator/bin
+﻿*/**/bin/Debug
+*/**/bin/Release
+*/**/obj/Debug
+*/**/obj/Release
 SignalGenerator/.vs
