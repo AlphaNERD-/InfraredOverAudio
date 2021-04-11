@@ -39,32 +39,50 @@
 
     //Serial.println(after - before);
 
-    //Serial.print(goertzel(sampleData,NUM_SAMPLES,1000));
-    //Serial.print(" ");
-    //Serial.println(goertzel(sampleData,NUM_SAMPLES,400));
+    /*Serial.print(goertzel(sampleData,NUM_SAMPLES,5200));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,4600));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,4000));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,3400));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,2800));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,2200));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,1600));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,1000));
+    Serial.print(" ");
+    Serial.println(goertzel(sampleData,NUM_SAMPLES,400));*/
 
-    if (goertzel(sampleData,NUM_SAMPLES,1000) > 12000)
-      status = 2;
-    else if (goertzel(sampleData,NUM_SAMPLES,400) > 12000)
-      status = 1;
-    else
-      status = 0;
-
-    if (status != prevStatus)
+    if (goertzel(sampleData,NUM_SAMPLES,400) > 12000)
     {
-      switch (status)
-      {
-        case 0:
-          Serial.println(-1);
-          break;
-        case 1:
-          Serial.println(0);
-          break;
-        case 2:
-          Serial.println(1);
-          break;
-      }
+      Serial.println(00);
+    }
+    else
+    {
+      int number = 0;
+      
+      if (goertzel(sampleData,NUM_SAMPLES,1000) > 200)
+        number = number + 1;
+      if (goertzel(sampleData,NUM_SAMPLES,1600) > 200)
+        number = number + 2;
+      if (goertzel(sampleData,NUM_SAMPLES,2200) > 200)
+        number = number + 4;
+      if (goertzel(sampleData,NUM_SAMPLES,2800) > 200)
+        number = number + 8;
+      if (goertzel(sampleData,NUM_SAMPLES,3400) > 200)
+        number = number + 16;
+      if (goertzel(sampleData,NUM_SAMPLES,4000) > 200)
+        number = number + 32;
+      if (goertzel(sampleData,NUM_SAMPLES,4600) > 200)
+        number = number + 64;
+      if (goertzel(sampleData,NUM_SAMPLES,5200) > 200)
+        number = number + 128;
 
-      prevStatus = status;
+      if (number > 0)
+        Serial.println(number);
     }
   }

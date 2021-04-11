@@ -40,9 +40,12 @@
             this.nudPauseLength = new System.Windows.Forms.NumericUpDown();
             this.lblBitLength = new System.Windows.Forms.Label();
             this.lblPauseLength = new System.Windows.Forms.Label();
+            this.nudSendByte = new System.Windows.Forms.NumericUpDown();
+            this.lblSendByte = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudIRFrequency)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBitLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPauseLength)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSendByte)).BeginInit();
             this.SuspendLayout();
             // 
             // nudIRFrequency
@@ -77,7 +80,7 @@
             this.tbxIRdata.Margin = new System.Windows.Forms.Padding(2);
             this.tbxIRdata.Multiline = true;
             this.tbxIRdata.Name = "tbxIRdata";
-            this.tbxIRdata.Size = new System.Drawing.Size(359, 148);
+            this.tbxIRdata.Size = new System.Drawing.Size(359, 122);
             this.tbxIRdata.TabIndex = 1;
             this.tbxIRdata.Text = "+100 +200 +300 +400 +500 +600 +700 +800 +900 +1000";
             // 
@@ -204,11 +207,34 @@
             this.lblPauseLength.TabIndex = 11;
             this.lblPauseLength.Text = "Pause length";
             // 
+            // nudSendByte
+            // 
+            this.nudSendByte.Location = new System.Drawing.Point(80, 155);
+            this.nudSendByte.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudSendByte.Name = "nudSendByte";
+            this.nudSendByte.Size = new System.Drawing.Size(90, 20);
+            this.nudSendByte.TabIndex = 12;
+            // 
+            // lblSendByte
+            // 
+            this.lblSendByte.AutoSize = true;
+            this.lblSendByte.Location = new System.Drawing.Point(9, 157);
+            this.lblSendByte.Name = "lblSendByte";
+            this.lblSendByte.Size = new System.Drawing.Size(58, 13);
+            this.lblSendByte.TabIndex = 13;
+            this.lblSendByte.Text = "Byte Value";
+            // 
             // frmIRSignalGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(442, 264);
+            this.Controls.Add(this.lblSendByte);
+            this.Controls.Add(this.nudSendByte);
             this.Controls.Add(this.lblPauseLength);
             this.Controls.Add(this.lblBitLength);
             this.Controls.Add(this.nudPauseLength);
@@ -227,6 +253,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudIRFrequency)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBitLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPauseLength)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSendByte)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -246,6 +273,8 @@
         private System.Windows.Forms.NumericUpDown nudPauseLength;
         private System.Windows.Forms.Label lblBitLength;
         private System.Windows.Forms.Label lblPauseLength;
+        private System.Windows.Forms.NumericUpDown nudSendByte;
+        private System.Windows.Forms.Label lblSendByte;
     }
 }
 
