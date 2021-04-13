@@ -40,12 +40,14 @@
             this.nudPauseLength = new System.Windows.Forms.NumericUpDown();
             this.lblBitLength = new System.Windows.Forms.Label();
             this.lblPauseLength = new System.Windows.Forms.Label();
-            this.nudSendByte = new System.Windows.Forms.NumericUpDown();
-            this.lblSendByte = new System.Windows.Forms.Label();
+            this.nudRow = new System.Windows.Forms.NumericUpDown();
+            this.lblRow = new System.Windows.Forms.Label();
+            this.nudCol = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.nudIRFrequency)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBitLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPauseLength)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendByte)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCol)).BeginInit();
             this.SuspendLayout();
             // 
             // nudIRFrequency
@@ -207,34 +209,67 @@
             this.lblPauseLength.TabIndex = 11;
             this.lblPauseLength.Text = "Pause length";
             // 
-            // nudSendByte
+            // nudRow
             // 
-            this.nudSendByte.Location = new System.Drawing.Point(80, 155);
-            this.nudSendByte.Maximum = new decimal(new int[] {
-            255,
+            this.nudRow.Location = new System.Drawing.Point(80, 155);
+            this.nudRow.Maximum = new decimal(new int[] {
+            4,
             0,
             0,
             0});
-            this.nudSendByte.Name = "nudSendByte";
-            this.nudSendByte.Size = new System.Drawing.Size(90, 20);
-            this.nudSendByte.TabIndex = 12;
+            this.nudRow.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudRow.Name = "nudRow";
+            this.nudRow.Size = new System.Drawing.Size(90, 20);
+            this.nudRow.TabIndex = 12;
+            this.nudRow.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // lblSendByte
+            // lblRow
             // 
-            this.lblSendByte.AutoSize = true;
-            this.lblSendByte.Location = new System.Drawing.Point(9, 157);
-            this.lblSendByte.Name = "lblSendByte";
-            this.lblSendByte.Size = new System.Drawing.Size(58, 13);
-            this.lblSendByte.TabIndex = 13;
-            this.lblSendByte.Text = "Byte Value";
+            this.lblRow.AutoSize = true;
+            this.lblRow.Location = new System.Drawing.Point(9, 157);
+            this.lblRow.Name = "lblRow";
+            this.lblRow.Size = new System.Drawing.Size(49, 13);
+            this.lblRow.TabIndex = 13;
+            this.lblRow.Text = "Row/Col";
+            // 
+            // nudCol
+            // 
+            this.nudCol.Location = new System.Drawing.Point(176, 155);
+            this.nudCol.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.nudCol.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudCol.Name = "nudCol";
+            this.nudCol.Size = new System.Drawing.Size(99, 20);
+            this.nudCol.TabIndex = 14;
+            this.nudCol.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // frmIRSignalGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(442, 264);
-            this.Controls.Add(this.lblSendByte);
-            this.Controls.Add(this.nudSendByte);
+            this.Controls.Add(this.nudCol);
+            this.Controls.Add(this.lblRow);
+            this.Controls.Add(this.nudRow);
             this.Controls.Add(this.lblPauseLength);
             this.Controls.Add(this.lblBitLength);
             this.Controls.Add(this.nudPauseLength);
@@ -253,7 +288,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudIRFrequency)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBitLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPauseLength)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendByte)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCol)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -273,8 +309,9 @@
         private System.Windows.Forms.NumericUpDown nudPauseLength;
         private System.Windows.Forms.Label lblBitLength;
         private System.Windows.Forms.Label lblPauseLength;
-        private System.Windows.Forms.NumericUpDown nudSendByte;
-        private System.Windows.Forms.Label lblSendByte;
+        private System.Windows.Forms.NumericUpDown nudRow;
+        private System.Windows.Forms.Label lblRow;
+        private System.Windows.Forms.NumericUpDown nudCol;
     }
 }
 
