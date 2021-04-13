@@ -1,113 +1,88 @@
-const int setFrequencySound = 1000;
-const int receiveDataSound = 2000;
-const int receiveDataEndSound = 3000;
+#include "Arduino.h"
 
-const int readyMode = 0;
-const int setFrequencyMode = 1;
-const int receiveDataMode = 2;
-const int sendDataMode = 3;
+#define NUM_SAMPLES 100
+#define ADC_MIDPOINT 512
+#define AUDIO_PIN 23
 
-volatile unsigned long timeBefore;
-volatile unsigned long timeNow;
-volatile unsigned long delta;
-volatile float audioFrequencyBefore;
-volatile float audioFrequency;
+#define SAMPLE_FREQ 64516
 
-volatile float irFrequency;
-volatile int irData[100];
-volatile int irDataIndex;
+  int status = 0;
+  int prevStatus = 0;
 
-volatile int mode = 0;
-
-ISR (ANALOG_COMP_vect)
-  {
-    timeNow = TCNT1;
-    TCNT1 = 0; //reset timer register
+  void setup() {
+    Serial.begin(115200);
+    pinMode(AUDIO_PIN, INPUT);
+    ADCSRA = (ADCSRA & B11111000) | 4;
+  }
+  
+  // magnitude-only goertzel algo operating on array, adapted from https://github.com/jacobrosenthal/Goertzel
+  float goertzel(int samples[], int num_samples, float freq){
+    float Q1 = 0;
+    float Q2 = 0;
+    float coeff = 2.0 * cos((2.0 * PI * freq) / SAMPLE_FREQ);
+    for (int i = 0; i < num_samples; i++) {
+      float Q0 = coeff * Q1 - Q2 + (float) (samples[i] - ADC_MIDPOINT);
+      Q2 = Q1;
+      Q1 = Q0;
+    }
+    return sqrt(Q1*Q1 + Q2*Q2 - coeff*Q1*Q2);
   }
 
-void setup ()
-  {
-    Serial.begin (115200);
-    Serial.println ("Started.");
-    ADCSRB = 0;           // (Disable) ACME: Analog Comparator Multiplexer Enable
-    ACSR =  bit (ACI)     // (Clear) Analog Comparator Interrupt Flag
-          | bit (ACIE)    // Analog Comparator Interrupt Enable
-          | bit (ACIS1);  // ACIS1, ACIS0: Analog Comparator Interrupt Mode Select (trigger on falling edge)
+  void loop() {
+    int sampleData[NUM_SAMPLES];
 
-    TCCR1A = 0;
-    TCCR1B |= (0 << CS12) | (1 << CS11) | (0 >> CS10); //Activate timer and set prescaler to 8
-    TCNT1 = 0; //Reset timer register
-   }  // end of setup
-
-void loop ()
-  {
-    //Calculate frequency by using the period duration
-    //determined through the timestamps captured in
-    //ISR method.
-    //delta = timeNow - timeBefore;
-    audioFrequency = 1000000.0 / (float(timeNow) * 4.0);
-
-    if (millis() % 1000 == 0)
-    {
-      Serial.print (audioFrequency, 5);
-      Serial.print (" Hz, ");
-      Serial.print (timeNow);
-      Serial.println (" TCNT0");
+    int before = millis();
+    for(int i=0; i < NUM_SAMPLES; i++){
+      sampleData[i] = analogRead(AUDIO_PIN);
     }
+    int after = millis();
 
-    //Do not process the same frequency multiple times
-    if (audioFrequency != audioFrequencyBefore)
+    //Serial.println(after - before);
+
+    /*Serial.print(goertzel(sampleData,NUM_SAMPLES,5200));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,4600));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,4000));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,3400));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,2800));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,2200));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,1600));
+    Serial.print(" ");
+    Serial.print(goertzel(sampleData,NUM_SAMPLES,1000));
+    Serial.print(" ");
+    Serial.println(goertzel(sampleData,NUM_SAMPLES,400));*/
+
+    if (goertzel(sampleData,NUM_SAMPLES,400) > 12000)
     {
-      switch (mode)
-      {
-        case readyMode:
-          if (audioFrequency == setFrequencySound)
-          {
-            mode = 1;
-
-            Serial.println ("Start setting IR frequency.");
-          }
-          else if (audioFrequency == receiveDataSound)
-          {
-            mode = 2;
-
-            Serial.println ("Start receiving IR data.");
-          }
-          break;
-        case setFrequencyMode:
-          irFrequency = audioFrequency + 25000;
-
-          Serial.print ("IR frequency set to ");
-          Serial.print (irFrequency, 10);
-          Serial.println (" Hz.");
-          
-          mode = readyMode;
-          break;
-        case receiveDataMode:
-          if (audioFrequency == receiveDataEndSound)
-          {
-            Serial.println ("Stop receiving IR data.");
-            
-            mode = readyMode;
-            irDataIndex = 0;
-          }
-          else
-          {
-            irData[irDataIndex] = audioFrequency;
-
-            irDataIndex++;
-
-            Serial.print ("IR pulse received: ");
-            Serial.print (irData[irDataIndex]);
-            Serial.println (" microsecs.");
-          }
-          break;
-        case sendDataMode:
-          Serial.println ("Sending IR data...");
-          break;
-      }
+      Serial.println(00);
     }
+    else
+    {
+      int number = 0;
+      
+      if (goertzel(sampleData,NUM_SAMPLES,1000) > 200)
+        number = number + 1;
+      if (goertzel(sampleData,NUM_SAMPLES,1600) > 200)
+        number = number + 2;
+      if (goertzel(sampleData,NUM_SAMPLES,2200) > 200)
+        number = number + 4;
+      if (goertzel(sampleData,NUM_SAMPLES,2800) > 200)
+        number = number + 8;
+      if (goertzel(sampleData,NUM_SAMPLES,3400) > 200)
+        number = number + 16;
+      if (goertzel(sampleData,NUM_SAMPLES,4000) > 200)
+        number = number + 32;
+      if (goertzel(sampleData,NUM_SAMPLES,4600) > 200)
+        number = number + 64;
+      if (goertzel(sampleData,NUM_SAMPLES,5200) > 200)
+        number = number + 128;
 
-    audioFrequencyBefore = audioFrequency;
-    
-  }  // end of loop
+      if (number > 0)
+        Serial.println(number);
+    }
+  }
