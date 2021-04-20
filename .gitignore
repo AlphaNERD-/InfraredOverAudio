@@ -1,4 +1,4 @@
-﻿
+﻿*.sublime-*
 /SignalGenerator/SignalGenerator/bin/
 /SignalGenerator/SignalGenerator/obj/
 /SignalGenerator/.vs/
