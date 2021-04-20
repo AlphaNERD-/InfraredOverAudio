@@ -211,7 +211,7 @@
             // 
             this.nudSendByte.Location = new System.Drawing.Point(80, 155);
             this.nudSendByte.Maximum = new decimal(new int[] {
-            255,
+            2200,
             0,
             0,
             0});
@@ -224,9 +224,9 @@
             this.lblSendByte.AutoSize = true;
             this.lblSendByte.Location = new System.Drawing.Point(9, 157);
             this.lblSendByte.Name = "lblSendByte";
-            this.lblSendByte.Size = new System.Drawing.Size(58, 13);
+            this.lblSendByte.Size = new System.Drawing.Size(28, 13);
             this.lblSendByte.TabIndex = 13;
-            this.lblSendByte.Text = "Byte Value";
+            this.lblSendByte.Text = "Freq";
             // 
             // frmIRSignalGenerator
             // 

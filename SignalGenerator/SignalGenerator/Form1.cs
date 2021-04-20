@@ -48,48 +48,8 @@ namespace IRSignalGenerator
 
             gen0 = new SignalGenerator();
             gen0.Type = SignalGeneratorType.Sin;
-            gen0.Frequency = 400;
+            gen0.Frequency = 0;
             generators.Add(gen0);
-
-            gen1 = new SignalGenerator();
-            gen1.Type = SignalGeneratorType.Sin;
-            gen1.Frequency = 1000;
-            generators.Add(gen1);
-
-            gen2 = new SignalGenerator();
-            gen2.Type = SignalGeneratorType.Sin;
-            gen2.Frequency = 1600;
-            generators.Add(gen2);
-
-            gen4 = new SignalGenerator();
-            gen4.Type = SignalGeneratorType.Sin;
-            gen4.Frequency = 2200;
-            generators.Add(gen4);
-
-            gen8 = new SignalGenerator();
-            gen8.Type = SignalGeneratorType.Sin;
-            gen8.Frequency = 2800;
-            generators.Add(gen8);
-
-            gen16 = new SignalGenerator();
-            gen16.Type = SignalGeneratorType.Sin;
-            gen16.Frequency = 3400;
-            generators.Add(gen16);
-
-            gen32 = new SignalGenerator();
-            gen32.Type = SignalGeneratorType.Sin;
-            gen32.Frequency = 4000;
-            generators.Add(gen32);
-
-            gen64 = new SignalGenerator();
-            gen64.Type = SignalGeneratorType.Sin;
-            gen64.Frequency = 4600;
-            generators.Add(gen64);
-
-            gen128 = new SignalGenerator();
-            gen128.Type = SignalGeneratorType.Sin;
-            gen128.Frequency = 5200;
-            generators.Add(gen128);
 
             provider = new MixingSampleProvider(generators);
 
@@ -102,7 +62,7 @@ namespace IRSignalGenerator
             switchSignalTimer.Enabled = false;
             wo.Stop();
 
-            System.Threading.Thread.Sleep((int)nudPauseLength.Value);
+            //System.Threading.Thread.Sleep((int)nudPauseLength.Value);
 
             UpdateSignalGenerators();
 
@@ -137,46 +97,8 @@ namespace IRSignalGenerator
         {
             int byteValue = (int)nudSendByte.Value;
 
-            if (byteValue == 0)
-            {
                 gen0.Gain = 1.0;
-                gen1.Gain = 0.0;
-                gen2.Gain = 0.0;
-                gen4.Gain = 0.0;
-                gen8.Gain = 0.0;
-                gen16.Gain = 0.0;
-                gen32.Gain = 0.0;
-                gen64.Gain = 0.0;
-                gen128.Gain = 0.0;
-            }
-            else
-            {
-                gen0.Gain = 0.0;
-
-                if ((byteValue & (1 << 0)) != 0)
-                    gen1.Gain = 1.0;
-
-                if ((byteValue & (1 << 1)) != 0)
-                    gen2.Gain = 1.0;
-
-                if ((byteValue & (1 << 2)) != 0)
-                    gen4.Gain = 1.0;
-
-                if ((byteValue & (1 << 3)) != 0)
-                    gen8.Gain = 1.0;
-
-                if ((byteValue & (1 << 4)) != 0)
-                    gen16.Gain = 1.0;
-
-                if ((byteValue & (1 << 5)) != 0)
-                    gen32.Gain = 1.0;
-
-                if ((byteValue & (1 << 6)) != 0)
-                    gen64.Gain = 1.0;
-
-                if ((byteValue & (1 << 7)) != 0)
-                    gen128.Gain = 1.0;
-            }
+            gen0.Frequency = byteValue;
 
             lblInfo.Text = "Sending " + byteValue;
         }
