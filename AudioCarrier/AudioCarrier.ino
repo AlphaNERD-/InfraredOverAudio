@@ -55,8 +55,6 @@ void setup(){
 }
 
 uint8_t prev_idx=0;
-uint8_t state=0;
-uint8_t sync_idx=0;
 void loop(){
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE){
     if(ringbuffer_index!=prev_idx){
