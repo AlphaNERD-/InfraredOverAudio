@@ -45,6 +45,7 @@ namespace bell202 {
       if(!have_full_carrier)
         return 0;
       ret = accumulated_sign;
+      have_full_carrier = false;
       accumulated_sign = 0;
     }
     if(ret==0)
