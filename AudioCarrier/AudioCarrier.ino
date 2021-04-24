@@ -3,7 +3,7 @@
 
 bool recordByte = false;
 uint8_t currentByte = 0;
-int currentByteIndex = 0;
+uint8_t currentByteIndex = 0;
 
 void setup(){
   pinMode(LED_BUILTIN, OUTPUT);
@@ -13,38 +13,22 @@ void setup(){
 
 void loop(){
   int32_t sign = bell202::get_sign();
-  
+
   if(sign==0) // no carrier accumulated (yet)
     return;
 
   if(abs(sign)>1000){ // sign loud enough
-    if(sign>0){ // mark = 2200Hz
-      //digitalWrite(LED_BUILTIN,HIGH);
-      if (recordByte)
+    if(sign < 0 && !recordByte){
+      recordByte = true;
+    }else{
+      if (currentByteIndex++ > 7)
       {
-        if (currentByteIndex > 7)
-        {
-          recordByte = false;
-          currentByteIndex = 0;
-          
-          Serial.println(currentByte);
-        }
-        
-        currentByte = (currentByte << 1) | 1;
-        currentByteIndex++;
-      }
-      
-    }else{      // space = 1200Hz
-      //digitalWrite(LED_BUILTIN,LOW);
+        recordByte = false;
+        currentByteIndex = 0;
 
-      if (!recordByte)
-      {
-        recordByte = true;
-      }
-      else
-      {
-        currentByte = (currentByte << 1) | 0;
-        currentByteIndex++;
+        Serial.println(currentByte);
+      }else{
+        currentByte = (currentByte << 1) | (sign>0);
       }
     }
   }else{ // silence
