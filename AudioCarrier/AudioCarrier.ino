@@ -21,14 +21,14 @@ void loop(){
     if(sign < 0 && !recordByte){
       recordByte = true;
     }else{
-      if (currentByteIndex++ > 7)
+      if (++currentByteIndex > 7)
       {
         recordByte = false;
         currentByteIndex = 0;
 
-        Serial.println(currentByte);
+        Serial.println(currentByte, HEX);
       }else{
-        currentByte = (currentByte << 1) | (sign>0);
+        currentByte = (currentByte >> 1) | ((sign>0)<<7);
       }
     }
   }else{ // silence
