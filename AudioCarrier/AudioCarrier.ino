@@ -8,7 +8,6 @@ uint8_t currentByteIndex = 0;
 void setup(){
   pinMode(LED_BUILTIN, OUTPUT);
   bell202::setup(A0);
-  Serial.begin(115200);
 }
 
 void loop(){
@@ -26,7 +25,9 @@ void loop(){
         recordByte = false;
         currentByteIndex = 0;
 
+        Serial.begin(115200);
         Serial.println(currentByte, HEX);
+        Serial.end();
       }else{
         currentByte = (currentByte >> 1) | ((sign>0)<<7);
       }
